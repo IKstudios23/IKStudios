@@ -1,4 +1,4 @@
-/* IKSTUDIOS — Actor landing: tall vertical headshot reel (loops forever) */
+/* IKSTUDIOS — Actor landing: headshot reel. Loops forever; scroll the mouse wheel, drag, or swipe to browse (assets/js/drift.js) */
 (function () {
   var el = document.getElementById("headshots");
   if (!el) return;
@@ -10,7 +10,6 @@
   while (half.length < 10) half = half.concat(list);          // enough frames per loop to fill a tall page
   var strip = document.createElement("div");
   strip.className = "strip";
-  strip.style.animationDuration = (half.length * 9) + "s";    // slower with more photos
   half.concat(half).forEach(function (src) {                  // doubled = seamless loop
     var f = document.createElement("div"), img = new Image();
     f.className = "frame";
@@ -21,4 +20,5 @@
     f.appendChild(img); strip.appendChild(f);
   });
   el.appendChild(strip);
+  if (window.IK_drift) window.IK_drift(strip, { interactive: true, speed: { x: 34, y: 60 } });   // px per second: sideways band on phones · tall reel on desktop
 })();

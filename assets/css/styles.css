@@ -278,7 +278,13 @@ h1,h2,h3{font-family:var(--f-display);font-weight:700;line-height:1.04;letter-sp
   font-family:var(--f-mono);font-size:.6rem;letter-spacing:.3em;color:var(--muted-2);
   text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:.6rem;
 }
+.scrollcue{text-decoration:none;cursor:pointer;transition:color .3s}
 .scrollcue span{width:1px;height:34px;background:linear-gradient(var(--muted-2),transparent);animation:cue 2.2s var(--ease) infinite}
+.scrollcue em{font-style:normal;display:inline-flex;align-items:center;gap:.5em;margin-top:-.1rem;padding:.45rem .8rem .45rem .9rem;border-radius:999px;
+  border:1px solid var(--line-strong);background:rgba(0,0,0,.45);color:#cfd8ea;font-size:.56rem;letter-spacing:.24em;transition:border-color .3s,color .3s,box-shadow .3s}
+.scrollcue em i{font-style:normal;color:var(--blue);display:inline-block;animation:cuedown 1.6s var(--ease) infinite}
+.scrollcue:hover em,.scrollcue:focus-visible em{border-color:var(--blue);color:#fff;box-shadow:0 0 24px -6px var(--blue-glow)}
+@keyframes cuedown{0%,100%{transform:translateY(-2px)}50%{transform:translateY(3px)}}
 @keyframes cue{0%{transform:scaleY(0);transform-origin:top}45%{transform:scaleY(1);transform-origin:top}
   55%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
 
@@ -296,11 +302,11 @@ h1,h2,h3{font-family:var(--f-display);font-weight:700;line-height:1.04;letter-sp
   padding:24px 0;
   background:linear-gradient(90deg,#050609,#090b12,#050609);
   border-block:1px solid var(--line-strong);
-  animation:reeldrift linear infinite;
-  will-change:transform;
+  will-change:transform;      /* moved by assets/js/drift.js (keeps running on phones with Reduce Motion on) */
 }
-.reel--top .strip{animation-duration:64s;animation-direction:normal}
-.reel--bot .strip{animation-duration:88s;animation-direction:reverse}
+/* --loop = seconds for one seamless loop · --rev:1 = runs the other way (read by drift.js) */
+.reel--top .strip{--loop:64}
+.reel--bot .strip{--loop:88;--rev:1}
 
 /* perforations (film sprocket holes) — 70mm gauge */
 .strip{position:relative}
@@ -343,9 +349,8 @@ h1,h2,h3{font-family:var(--f-display);font-weight:700;line-height:1.04;letter-sp
   background:linear-gradient(90deg,#000 0,transparent 7%,transparent 93%,#000 100%)}
 .reel--band{position:relative;left:0;right:0;width:100%;transform:none;opacity:1;
   filter:none;display:flex}
-.reel--band .strip{animation-duration:74s;animation-direction:normal}
+.reel--band .strip{--loop:74}
 
-@keyframes reeldrift{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
 /* ============================================================
    PAGE HEADER (about / contact / generic)
@@ -505,7 +510,6 @@ h1,h2,h3{font-family:var(--f-display);font-weight:700;line-height:1.04;letter-sp
 @media (prefers-reduced-motion:reduce){
   *{animation-duration:.001ms !important;animation-iteration-count:1 !important;
     transition-duration:.001ms !important;scroll-behavior:auto !important}
-  .strip{animation:none;transform:none}
   .reveal{opacity:1;transform:none}
 }
 
@@ -594,7 +598,7 @@ h1,h2,h3{font-family:var(--f-display);font-weight:700;line-height:1.04;letter-sp
 .cside{position:relative;height:196px;overflow:hidden;border-block:1px solid var(--line);background:#04060a}
 .cside::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:3;background:linear-gradient(90deg,#000 0,transparent 9%,transparent 91%,#000 100%)}
 .reel--v{position:absolute;inset:0;left:0;right:0;width:auto;transform:none;opacity:1;filter:none;display:block}
-.reel--v .strip{height:100%;align-items:center;animation-duration:90s}
+.reel--v .strip{height:100%;align-items:center;--loop:90}
 .reel--v .frame{width:190px;aspect-ratio:4/3}
 .reel--v .frame--video{aspect-ratio:16/9}
 a.frame{display:block;transition:transform .3s var(--ease),border-color .3s}
@@ -603,7 +607,6 @@ a.frame::after{content:"";position:absolute;left:50%;top:50%;width:44px;height:4
   background:rgba(0,0,0,.6) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='white' d='M8 5v14l11-7z'/%3E%3C/svg%3E") center/48% no-repeat}
 a.frame:hover::after{opacity:1}
 a.frame.frame--tweet::after,a.frame:not(.frame--video):not(.frame--tweet)::after{background-image:none;content:"\2197";display:grid;place-items:center;color:#fff;font-size:1.3rem}
-@keyframes reeldriftY{from{transform:translateY(0)}to{transform:translateY(-50%)}}
 
 /* tweet cards (shown as frames in the reels) */
 .frame--tweet{background:linear-gradient(160deg,#0b0f18,#05070c)}
@@ -617,7 +620,7 @@ a.frame.frame--tweet::after,a.frame:not(.frame--video):not(.frame--tweet)::after
   .cside{position:absolute;top:0;right:var(--reel-gap);bottom:0;width:var(--reel-w);height:auto;order:0;z-index:0;border-block:0;border-inline:1px solid var(--line)}
   .cside::after{background:linear-gradient(90deg,#000 0,transparent 24%)}
   .chans,.chero{margin-right:calc(var(--reel-w) + var(--reel-gap) + 12px)}
-  .reel--v .strip{height:auto;width:100%;flex-direction:column;padding:0 28px;border-block:0;border-inline:0;animation-name:reeldriftY}
+  .reel--v .strip{height:auto;width:100%;flex-direction:column;padding:0 28px;border-block:0;border-inline:0}
   .reel--v .frame{width:100%;margin:7px 0}
   .reel--v .strip::before,.reel--v .strip::after{top:0;bottom:0;height:auto;width:15px;background-repeat:repeat-y;background-size:15px 36px;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='36'%3E%3Crect x='3' y='9' width='9' height='18' rx='2.5' fill='none' stroke='rgba(255,255,255,0.22)' stroke-width='1'/%3E%3C/svg%3E")}
@@ -647,6 +650,25 @@ a.frame.frame--tweet::after,a.frame:not(.frame--video):not(.frame--tweet)::after
 .actor{--reel-w:clamp(300px,32vw,460px);min-height:100vh}
 .actor .cside{order:0;height:300px}
 .actor .reel--v .frame{width:170px;aspect-ratio:2/3}
+/* reels you can scroll / drag / swipe (every reel except the home page) — see assets/js/drift.js */
+.is-browsable{cursor:grab;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+.is-browsable.is-drag{cursor:grabbing}
+.is-browsable img{pointer-events:none;-webkit-user-drag:none;user-select:none}
+.is-browsable:focus-visible{outline:2px solid var(--blue);outline-offset:-3px}
+/* tiny "you can scroll this" pill that fades in over the reel, then away */
+.reel-hint{position:absolute;left:50%;bottom:14px;z-index:4;transform:translateX(-50%);pointer-events:none;
+  display:flex;align-items:center;gap:.65rem;padding:.5rem .95rem .5rem .8rem;border-radius:999px;white-space:nowrap;
+  font:700 .58rem/1 var(--f-mono);letter-spacing:.22em;text-transform:uppercase;color:#e3e9f5;
+  background:rgba(0,0,0,.66);border:1px solid var(--line-strong);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  box-shadow:0 0 26px -8px var(--blue-glow);opacity:0;transition:opacity .9s var(--ease)}
+.reel-hint.on{opacity:1}
+.reel-hint__ic{display:grid;color:var(--blue);animation:hintx 1.7s var(--ease) infinite}
+.reel-hint__ic svg{width:18px;height:18px}
+.reel-hint--v{bottom:auto;top:calc(var(--nav-h) + 22px)}   /* the tall reel runs behind the fixed nav, so sit just below it */
+.reel-hint--v .reel-hint__ic{animation-name:hinty}
+.reel-hint--v .reel-hint__ic svg{transform:rotate(90deg)}
+@keyframes hintx{0%,100%{transform:translateX(-3px)}50%{transform:translateX(3px)}}
+@keyframes hinty{0%,100%{transform:translateY(-3px)}50%{transform:translateY(3px)}}
 .asplit{order:1;position:relative;flex:1;--g:clamp(8px,1.1vw,16px);
   min-height:max(540px,calc(100vh - var(--nav-h) - 60px));margin:clamp(14px,2.4vw,34px)}
 .tri{position:absolute;inset:0;pointer-events:none;
