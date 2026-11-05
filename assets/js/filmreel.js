@@ -121,7 +121,9 @@
       var g = groups[m], b = distribute(poolFor(m, g.length), g.length);
       g.forEach(function (r, i) {
         r.innerHTML = "";
-        r.appendChild(buildStrip(b[i], r.classList.contains("reel--v"), r.hasAttribute("data-links")));
+        var strip = buildStrip(b[i], r.classList.contains("reel--v"), r.hasAttribute("data-links"));
+        r.appendChild(strip);
+        if (window.IK_drift) window.IK_drift(strip, { interactive: !r.closest(".hero") });   // (re)starts the motion, carrying on from where the old strip was · every reel except the home page can be scrolled / dragged / swiped
       });
     });
   }
